@@ -36,6 +36,7 @@ function showAllClicked(info, tab) {
 var clearList = chrome.contextMenus.create({"title": "Clear list of deals to hide", "contexts": ["page","link","image"], "onclick":clearASINs, "documentUrlPatterns": ["*://*.amazon.com/*"]});
 
 function clearASINs(info,tab) {
+	if (!confirm("Are you sure you want to clear the list?")) return;
 	localStorage["blockASINs"] = JSON.stringify([]);
 	console.log("Clearing list");
 	chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {
