@@ -1,4 +1,5 @@
 // Copyright (c) 2015 Patrick Johnston. All rights reserved.
+// Portions of this script incorporate and modify JavaScript from Amazon
 var extensionId = "hhomjdbcpiomhhnbahbgbcejaoelmaha";
 var didFirstLoad = false;
 var showAllDeals = false;
