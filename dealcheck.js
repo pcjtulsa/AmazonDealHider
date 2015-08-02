@@ -21,7 +21,7 @@ document.addEventListener("load",function() {
 				console.log("Empty list.");
 				return;
 			}
-			ASINlist = JSON.parse(response.list);
+			ASINlist = response.list;
 			Deal.controller.metadata.getDealIds = function(g, a, d, b, h) {
 				var i = this;
 				var e = [];
@@ -114,7 +114,7 @@ function RefreshDeals() {
 			if (!response.list || response.list == "") {
 				return;
 			}
-			ASINlist = JSON.parse(response.list);
+			ASINlist = response.list;
 			for (var b in Deal.controller.metadata.dealIdBuckets) {
 				Deal.controller.trigger ('metadata_change'+b);
 				if (showAllDeals) continue;
