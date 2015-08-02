@@ -1,6 +1,6 @@
 // Copyright (c) 2015 Patrick Johnston. All rights reserved.
 
-var hideThis = chrome.contextMenus.create({"title": "Show/Hide this deal", "contexts": ["link"], "onclick":showHideDeal, "documentUrlPatterns": ["*://*.amazon.com/*"]});
+var hideThis = chrome.contextMenus.create({"title": "Show/Hide this deal", "contexts": ["link"], "onclick":showHideDeal, "documentUrlPatterns": ["*://*.amazon.com/*","*://*.amazon.co.uk/*"]});
 
 function showHideDeal(info,tab) {
 	var ASINpatt = /.*?\.?ama?zo?n\.(?:com|ca|co\.uk|co\.jp|de|fr)\/(?:exec\/obidos\/ASIN\/|o\/|gp\/product\/|(?:(?:[^"\'\/]*)\/)?dp\/|)(B[A-Z0-9]{9})(?:(?:\/|\?|\#)(?:[^"\'\s]*))?/
@@ -33,7 +33,7 @@ function showHideDeal(info,tab) {
 	});
 }
 
-//var showAll = chrome.contextMenus.create({"title": "Show all hidden deals", "contexts": ["page","link","image"], "type": "checkbox", "onclick":showAllClicked, "documentUrlPatterns": ["*://*.amazon.com/*"]});
+//var showAll = chrome.contextMenus.create({"title": "Show all hidden deals", "contexts": ["page","link","image"], "type": "checkbox", "onclick":showAllClicked, "documentUrlPatterns": ["*://*.amazon.com/*","*://*.amazon.co.uk/*"]});
 
 function showAllClicked(info, tab) {
 	chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {
@@ -41,7 +41,7 @@ function showAllClicked(info, tab) {
 	});
 }
 
-var clearList = chrome.contextMenus.create({"title": "Clear list of deals to hide", "contexts": ["page","link","image"], "onclick":clearASINs, "documentUrlPatterns": ["*://*.amazon.com/*"]});
+var clearList = chrome.contextMenus.create({"title": "Clear list of deals to hide", "contexts": ["page","link","image"], "onclick":clearASINs, "documentUrlPatterns": ["*://*.amazon.com/*","*://*.amazon.co.uk/*"]});
 
 function clearASINs(info,tab) {
 	if (!confirm("Are you sure you want to clear the list?")) return;

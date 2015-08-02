@@ -1,21 +1,21 @@
 {
   "name": "Amazon Deal Hider",
   "description": "Hides items from Amazon deals listings, based on their ASIN",
-  "version": "1.0.9.3",
+  "version": "1.0.9.4",
   "content_scripts": [
-	{"matches": ["*://*.amazon.com/*"],
+	{"matches": ["*://*.amazon.com/*","*://*.amazon.co.uk/*"],
 	"js":["addscript.js"]
 	}
   ],
   "permissions": [
 				"contextMenus","storage",
-				"*://*.amazon.com/"],
+				"*://*.amazon.com/","*://*.amazon.co.uk/*"],
   "background": {
     "scripts": ["amazondeals.js"]
   },
   "web_accessible_resources":["dealcheck.js"],
   "externally_connectable": {
-		"matches": ["*://*.amazon.com/*"]
+		"matches": ["*://*.amazon.com/*","*://*.amazon.co.uk/*"]
 	},
   "manifest_version": 2
 }
