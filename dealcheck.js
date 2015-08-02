@@ -6,7 +6,7 @@ var showAllDeals = false;
 var ASINlist = [];
 function checkDeal(tDeal) {
 	if (ASINlist==undefined || tDeal==undefined || showAllDeals) return false;
-	if (ASINlist.indexOf(tDeal.buyAsin) != -1 || ASINlist.indexOf(tDeal.impressionAsin) != -1 || ASINlist.indexOf(tDeal.parentAsin) != -1 || ASINlist.indexOf(tDeal.teaser.teaserAsin) != -1) return true;
+	if (ASINlist.indexOf(tDeal.buyAsin) != -1 || ASINlist.indexOf(tDeal.impressionAsin) != -1 || ASINlist.indexOf(tDeal.parentAsin) != -1 || ASINlist.indexOf(tDeal.teaser.teaserAsin) != -1 || ASINlist.indexOf(tDeal.dealID) != -1) return true;
 	if (tDeal.detail == undefined) return false;
 	if (tDeal.detail.URL == null) return false;
 	var ASINpatt = /.*?\.?ama?zo?n\.(?:com|ca|co\.uk|co\.jp|de|fr)\/(?:exec\/obidos\/ASIN\/|o\/|gp\/product\/|(?:(?:[^"\'\/]*)\/)?dp\/|)(B[A-Z0-9]{9})(?:(?:\/|\?|\#)(?:[^"\'\s]*))?/

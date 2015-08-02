@@ -6,8 +6,13 @@ function showHideDeal(info,tab) {
 	var ASINpatt = /.*?\.?ama?zo?n\.(?:com|ca|co\.uk|co\.jp|de|fr)\/(?:exec\/obidos\/ASIN\/|o\/|gp\/product\/|(?:(?:[^"\'\/]*)\/)?dp\/|)(B[A-Z0-9]{9})(?:(?:\/|\?|\#)(?:[^"\'\s]*))?/
 	var ASIN = info.linkUrl.replace(ASINpatt,"$1");
 	if (!ASIN || ASIN.indexOf("http") != -1) {
-		console.log("Error: ASIN not found.");
-		return;
+		var dealIDpatt = /.*?\.?ama?zo?n\.(?:com|ca|co\.uk|co\.jp|de|fr)\/s\/browse\/ref=.*?([0-9a-f]{8})\?node.*/
+		ASIN = info.linkUrl.replace(dealIDpatt,"$1");
+		if (!ASIN || ASIN.indexOf("http") != -1) {
+			console.log("Error: ASIN not found.");
+			return;
+		}
+		console.log("Using deal ID.");
 	}
 	chrome.storage.sync.get("blockASINs",function (items) {
 		if (items.blockASINs == undefined) items.blockASINs = [];
