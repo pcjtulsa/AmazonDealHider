@@ -52,4 +52,5 @@ chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResp
 	chrome.storage.sync.get("blockASINs",function (items) {
 		sendResponse({list: items.blockASINs});
 	});	
+	return true;
 });
