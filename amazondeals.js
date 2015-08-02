@@ -31,8 +31,8 @@ function showHideDeal(info,tab) {
 		});
 	});
 }
-
-//var showAll = chrome.contextMenus.create({"title": "Show all hidden deals", "contexts": ["page","link","image"], "type": "checkbox", "onclick":showAllClicked, "documentUrlPatterns": urlPatterns});
+var sep = chrome.contextMenus.create({"type":"separator","contexts":["link"],"documentUrlPatterns":urlPatterns});
+var showAll = chrome.contextMenus.create({"title": "Show all hidden deals", "contexts": ["page","link","image"], "type": "checkbox", "onclick":showAllClicked, "documentUrlPatterns": urlPatterns});
 
 function showAllClicked(info, tab) {
 	chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {

@@ -100,7 +100,7 @@ document.addEventListener("load",function() {
 				RefreshDeals();
 			}
 			if (!didFirstLoad) {
-				setTimeout(RefreshDeals,1000);
+				setTimeout(RefreshDeals,500);
 				didFirstLoad = true;
 			}
 		}
