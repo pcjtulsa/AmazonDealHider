@@ -9,19 +9,22 @@ function showHideDeal(info,tab) {
 		console.log("Error: ASIN not found.");
 		return;
 	}
-	if (localStorage["blockASINs"]==undefined) localStorage["blockASINs"]=JSON.stringify([]);
-	var ASINlist = JSON.parse(localStorage["blockASINs"]);
-	if (ASINlist.indexOf(ASIN) != -1) {
-		console.log("Show ASIN "+ASIN);
-		ASINlist.splice(ASINlist.indexOf(ASIN),1);
-	}
-	else {
-		console.log("Hide ASIN "+ASIN);
-		ASINlist.push(ASIN);
-	}
-	localStorage["blockASINs"] = JSON.stringify(ASINlist);
-	chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {
-		chrome.tabs.sendMessage(tabs[0].id,{command:"RefreshDeals"});
+	chrome.storage.sync.get("blockASINs",function (items) {
+		if (items.blockASINs == undefined) items.blockASINs = [];
+		var ASINlist = items.blockASINs;
+		if (ASINlist.indexOf(ASIN) != -1) {
+			console.log("Show ASIN "+ASIN);
+			ASINlist.splice(ASINlist.indexOf(ASIN),1);
+		}
+		else {
+			console.log("Hide ASIN "+ASIN);
+			ASINlist.push(ASIN);
+		}
+		chrome.storage.sync.set({"blockASINs":ASINlist},function() {
+			chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {
+				chrome.tabs.sendMessage(tabs[0].id,{command:"RefreshDeals"});
+			});
+		});
 	});
 }
 
@@ -37,13 +40,16 @@ var clearList = chrome.contextMenus.create({"title": "Clear list of deals to hid
 
 function clearASINs(info,tab) {
 	if (!confirm("Are you sure you want to clear the list?")) return;
-	localStorage["blockASINs"] = JSON.stringify([]);
-	console.log("Clearing list");
-	chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {
-		chrome.tabs.sendMessage(tabs[0].id,{command:"RefreshDeals"});
+	chrome.storage.sync.set({"blockASINs":[]},function() {
+		console.log("Clearing list");
+		chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {
+			chrome.tabs.sendMessage(tabs[0].id,{command:"RefreshDeals"});
+		});
 	});
 }
 
 chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResponse) {
-	sendResponse({list: localStorage["blockASINs"]});
+	chrome.storage.sync.get("blockASINs",function (items) {
+		sendResponse({list: items.blockASINs});
+	});	
 });

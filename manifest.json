@@ -1,14 +1,14 @@
 {
   "name": "Amazon Deal Hider",
   "description": "Hides items from Amazon deals listings, based on their ASIN",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "content_scripts": [
 	{"matches": ["*://*.amazon.com/*"],
 	"js":["addscript.js"]
 	}
   ],
   "permissions": [
-				"contextMenus",
+				"contextMenus","storage",
 				"*://*.amazon.com/"],
   "background": {
     "scripts": ["amazondeals.js"]
