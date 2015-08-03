@@ -24,7 +24,7 @@ function showHideDeal(info,tab) {
 			if(items[getCacheKey("blockASINs", i)] === undefined) break;
 			value += items[getCacheKey("blockASINs", i)];
 		}
-		var ASINlist = JSON.parse(value);
+		var ASINlist = (value=="")?[]:JSON.parse(value);
 		if (ASINlist.indexOf(ASIN) != -1) {
 			console.log("Show "+ASIN);
 			ASINlist.splice(ASINlist.indexOf(ASIN),1);
@@ -82,7 +82,8 @@ chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResp
 			if(items[getCacheKey("blockASINs", i)] === undefined) break;
 			value += items[getCacheKey("blockASINs", i)];
 		}
-		sendResponse({list: JSON.parse(value)});
+		var ASINlist = (value=="")?[]:JSON.parse(value);
+		sendResponse({list: ASINlist});
 	});	
 	return true;
 });
