@@ -81,6 +81,7 @@ chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResp
 		for(i=0; i<chrome.storage.sync.MAX_ITEMS; i++) {
 			if(items[getCacheKey("blockASINs", i)] === undefined) break;
 			value += items[getCacheKey("blockASINs", i)];
+			console.log(value);
 		}
 		var ASINlist = (value=="")?[]:JSON.parse(value);
 		sendResponse({list: ASINlist});
