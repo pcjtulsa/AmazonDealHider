@@ -100,12 +100,20 @@ document.addEventListener("load",function() {
 				RefreshDeals();
 			}
 			if (!didFirstLoad) {
-				setTimeout(RefreshDeals,500);
+				pageThroughDeals();
 				didFirstLoad = true;
 			}
 		}
 	);
 },true);
+
+function pageThroughDeals() {
+	for (var b in Deal.controller.metadata.dealIdBuckets) {
+		for (x=1;x<=Deal.controller.pages[b];x++)
+			setTimeout(Deal.controller.nextPage(b),500*x);
+		setTimeout(Deal.controller.nextPage(b,1),500*Deal.controller.pages[b]+1);
+	}
+}
 
 function RefreshDeals() {
 	console.log("Refreshing deals.");
