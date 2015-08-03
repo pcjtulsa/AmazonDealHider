@@ -132,5 +132,7 @@ document.addEventListener("RefreshDeals",RefreshDeals);
 
 document.addEventListener("ShowAllDeals",function(event) {
 	showAllDeals = event.detail;
+	if (showAllDeals) console.log("Showing all deals");
+	else console.log("Not showing all deals");
 	RefreshDeals();
 });
