@@ -24,7 +24,8 @@ function showHideDeal(info,tab) {
 			if(items[getCacheKey("blockASINs", i)] === undefined) break;
 			value += items[getCacheKey("blockASINs", i)];
 		}
-		var ASINlist = (value=="")?[]:(typeof(value)==object)?value:JSON.parse(value);
+		var ASINlistP = (value=="")?"[]":value;
+		var ASINlist = JSON.parse(ASINlistP);
 		if (ASINlist.indexOf(ASIN) != -1) {
 			console.log("Show "+ASIN);
 			ASINlist.splice(ASINlist.indexOf(ASIN),1);
@@ -45,7 +46,7 @@ function showHideDeal(info,tab) {
 			value = value.substr(chrome.storage.sync.QUOTA_BYTES_PER_ITEM - cacheKey.length - 2);
 			i++;
 		}
-		chrome.storage.sync.set({"blockASINs":cache},function() {
+		chrome.storage.sync.set(cache,function() {
 			chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {
 				chrome.tabs.sendMessage(tabs[0].id,{command:"RefreshDeals"});
 			});
@@ -79,11 +80,11 @@ chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResp
 		var i = 0;
 		var value = "";
 		for(i=0; i<chrome.storage.sync.MAX_ITEMS; i++) {
-			if(items[getCacheKey("blockASINs", i)] === undefined) break;
-			value += items[getCacheKey("blockASINs", i)];
+			if(typeof(items[getCacheKey("blockASINs",i)]) == "undefined") break;
+			value += items[getCacheKey("blockASINs",i)];
 		}
-		var ASINlist = (value=="")?[]:(typeof(value)==object)?value:JSON.parse(value);
-		sendResponse({list: ASINlist});
+		var ASINlist = (value=="")?"[]":value;
+		sendResponse({list: JSON.parse(ASINlist)});
 	});	
 	return true;
 });
