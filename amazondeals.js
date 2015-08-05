@@ -42,8 +42,9 @@ function showHideDeal(info,tab) {
 		while(value.length > 0) {
 			cacheKey = getCacheKey("blockASINs", i);
 			segment = value.substr(0, chrome.storage.sync.QUOTA_BYTES_PER_ITEM - cacheKey.length - 2);
+			segment = segment.substr(0, segment.length - ((segment.match(/"/g) || []).length));
 			cache[cacheKey] = segment;
-			value = value.substr(chrome.storage.sync.QUOTA_BYTES_PER_ITEM - cacheKey.length - 2);
+			value = value.substr(segment.length);
 			i++;
 		}
 		chrome.storage.sync.set(cache,function() {
