@@ -9,7 +9,7 @@ function showHideDeal(info,tab) {
 	var ASINpatt = /.*?\.?ama?zo?n\.(?:com|ca|co\.uk|co\.jp|de|fr)\/(?:exec\/obidos\/ASIN\/|o\/|gp\/product\/|(?:(?:[^"\'\/]*)\/)?dp\/|)(B[A-Z0-9]{9})(?:(?:\/|\?|\#)(?:[^"\'\s]*))?/
 	var ASIN = info.linkUrl.replace(ASINpatt,"$1");
 	if (!ASIN || ASIN.indexOf("http") != -1) {
-		var dealIDpatt = /.*?\.?ama?zo?n\.(?:com|ca|co\.uk|co\.jp|de|fr)(?:\/jewelry|)\/(?:s|b|gp\/search|gp\/coupon.*?)(?:\/browse|)\/ref=.*?([0-9a-f]{8})\?.*/
+		var dealIDpatt = /.*?\.?ama?zo?n\.(?:com|ca|co\.uk|co\.jp|de|fr)(?:\/jewelry|)\/(?:s|b|gp\/search|gp\/browse.html|gp\/coupon.*?)(?:\/browse|)\/ref=.*?([0-9a-f]{8})\?.*/
 		ASIN = info.linkUrl.replace(dealIDpatt,"$1");
 		if (!ASIN || ASIN.indexOf("http") != -1) {
 			console.log("Error: ASIN not found.");
