@@ -14,8 +14,14 @@ function checkDeal(tDeal) {
 	return (ASINlist.indexOf(ASIN) != -1);
 }
 
+function ManageCategory(cat, ar) {
+	chrome.runtime.sendMessage(extensionId, {message: "categories", category: cat, addremove: ar}, function(response) {
+		RefreshDeals();
+	});
+}
+
 document.addEventListener("load",function() {
-	chrome.runtime.sendMessage(extensionId, {},
+	chrome.runtime.sendMessage(extensionId, {message: "items"},
 		function(response) {
 			if (!response.list || response.list == "") {
 				console.log("Empty list.");
@@ -100,6 +106,21 @@ document.addEventListener("load",function() {
 				RefreshDeals();
 			}
 			if (!didFirstLoad) {
+				jQuery("body").delegate("input.catHider","click",function(){
+					ManageCategory(jQuery(this).val(),!jQuery(this).prop("checked"));
+				});
+				chrome.runtime.sendMessage(extensionId, {message: "categories"},
+					function(categoryResponse) {
+						jQuery("a.a-declarative").mouseover(function() {
+							jQuery("ul.gbw_pop_ul").children().each(function() {
+								var val = jQuery(this).find("a").attr("value");
+								if (jQuery(this).html()==undefined || jQuery(this).hasClass("has_divider") || val == "all") return;
+								jQuery(this).children("a").css("width","135px");								
+								var checked = (categoryResponse.list.indexOf(val) != -1)?" checked=''":"";
+								if (jQuery(this).html().indexOf("catHider")==-1) jQuery(this).prepend("<span style='float:right;'><input value='"+val+"'"+checked+" type='checkbox' class='catHider' /></span>");		
+							});
+						});
+					});
 				setTimeout(RefreshDeals,500);
 				didFirstLoad = true;
 			}
@@ -109,7 +130,7 @@ document.addEventListener("load",function() {
 
 function RefreshDeals() {
 	console.log("Refreshing deals.");
-	chrome.runtime.sendMessage(extensionId, {},
+	chrome.runtime.sendMessage(extensionId, {message:"items"},
 		function(response) {
 			if (!response.list || response.list == "") {
 				return;

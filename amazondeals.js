@@ -77,15 +77,39 @@ function clearASINs(info,tab) {
 }
 
 chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResponse) {
-	chrome.storage.sync.get(null,function (items) {
-		var i = 0;
-		var value = "";
-		for(i=0; i<chrome.storage.sync.MAX_ITEMS; i++) {
-			if(typeof(items[getCacheKey("blockASINs",i)]) == "undefined") break;
-			value += items[getCacheKey("blockASINs",i)];
+	if (request.message == "items") {
+		chrome.storage.sync.get(null,function (items) {
+			var i = 0;
+			var value = "";
+			for(i=0; i<chrome.storage.sync.MAX_ITEMS; i++) {
+				if(typeof(items[getCacheKey("blockASINs",i)]) == "undefined") break;
+				value += items[getCacheKey("blockASINs",i)];
+			}
+			var ASINlist = (value=="")?"[]":value;
+			sendResponse({list: JSON.parse(ASINlist)});
+		});	
+	}
+	else if (request.message == "categories") {
+		if (request.addremove != undefined) {
+			chrome.storage.sync.get("categories",function(items) {
+				var catArr = [];
+				if (items.categories != undefined)
+					catArr = items.categories;
+				if (request.addremove == false && catArr.indexOf(request.category)==-1)
+					catArr.push(request.category);
+				else if (request.addremove == true && catArr.indexOf(request.category)!=-1)
+					catArr.splice(catArr.indexOf(request.category),1);
+				chrome.storage.sync.set({categories:catArr});
+			});
 		}
-		var ASINlist = (value=="")?"[]":value;
-		sendResponse({list: JSON.parse(ASINlist)});
-	});	
+		else {
+			chrome.storage.sync.get("categories",function(items){
+				var catArr = [];
+				if (items.categories != undefined)
+					catArr = items.categories;
+				sendResponse({list: catArr});
+			});
+		}
+	}
 	return true;
 });
