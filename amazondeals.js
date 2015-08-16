@@ -111,5 +111,17 @@ chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResp
 			});
 		}
 	}
+	else if (request.message == "all") {
+		chrome.storage.sync.get(null,function (items) {
+			var i = 0;
+			var value = "";
+			for(i=0; i<chrome.storage.sync.MAX_ITEMS; i++) {
+				if(typeof(items[getCacheKey("blockASINs",i)]) == "undefined") break;
+				value += items[getCacheKey("blockASINs",i)];
+			}
+			var ASINlist = (value=="")?"[]":value;
+			sendResponse({itemList: JSON.parse(ASINlist),categoryList: items["categories"]});
+		});		
+	}
 	return true;
 });

@@ -4,8 +4,18 @@ var extensionId = "hhomjdbcpiomhhnbahbgbcejaoelmaha";
 var didFirstLoad = false;
 var showAllDeals = false;
 var ASINlist = [];
+var categoryList = [];
 function checkDeal(tDeal) {
-	if (ASINlist==undefined || tDeal==undefined || showAllDeals) return false;
+	if (showAllDeals || Deal == undefined) return false;
+	for (var bucket in Deal.controller.metadata.dealIdBuckets) {
+		for (var sb in Deal.controller.metadata.dealIdBuckets[bucket]) {
+			for (var cat in categoryList) {
+				if (Deal.controller.metadata.dealIdBuckets[bucket][sb][cat] == undefined) continue;
+				if (Deal.controller.metadata.dealIdBuckets[bucket][sb][cat].indexOf(tDeal.dealID) != -1) return true;
+			}
+		}
+	}
+	if (ASINlist==undefined || tDeal==undefined) return false;
 	if (ASINlist.indexOf(tDeal.buyAsin) != -1 || ASINlist.indexOf(tDeal.impressionAsin) != -1 || ASINlist.indexOf(tDeal.parentAsin) != -1 || ASINlist.indexOf(tDeal.teaser.teaserAsin) != -1 || ASINlist.indexOf(tDeal.dealID) != -1) return true;
 	if (tDeal.detail == undefined) return false;
 	if (tDeal.detail.URL == null) return false;
@@ -112,10 +122,11 @@ document.addEventListener("load",function() {
 				chrome.runtime.sendMessage(extensionId, {message: "categories"},
 					function(categoryResponse) {
 						jQuery("a.a-declarative").mouseover(function() {
-							jQuery("ul.gbw_pop_ul").children().each(function() {
+							jQuery("li.gbw_pop_li").each(function() {
 								var val = jQuery(this).find("a").attr("value");
 								if (jQuery(this).html()==undefined || jQuery(this).hasClass("has_divider") || val == "all") return;
-								jQuery(this).children("a").css("width","135px");								
+								jQuery(this).children("a").css("width","135px");
+							    if (categoryResponse.list == undefined) return;
 								var checked = (categoryResponse.list.indexOf(val) != -1)?" checked=''":"";
 								if (jQuery(this).html().indexOf("catHider")==-1) jQuery(this).prepend("<span style='float:right;'><input value='"+val+"'"+checked+" type='checkbox' class='catHider' /></span>");		
 							});
@@ -130,12 +141,10 @@ document.addEventListener("load",function() {
 
 function RefreshDeals() {
 	console.log("Refreshing deals.");
-	chrome.runtime.sendMessage(extensionId, {message:"items"},
+	chrome.runtime.sendMessage(extensionId, {message:"all"},
 		function(response) {
-			if (!response.list || response.list == "") {
-				return;
-			}
-			ASINlist = response.list;
+			ASINlist = response.itemList;
+			categoryList = response.categoryList;
 			for (var b in Deal.controller.metadata.dealIdBuckets) {
 				Deal.controller.trigger ('metadata_change'+b);
 				if (showAllDeals) continue;
